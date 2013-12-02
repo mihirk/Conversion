@@ -5,42 +5,58 @@ import static org.junit.Assert.assertFalse;
 
 public class ConverterTest {
     @Test
-    public void shouldBeEqualForZeroValueDifferentUnitSameType() throws Exception {
-        //given
-        Measure inch = new Measure(Type.LENGTH, Unit.INCH, 0.0);
-        Measure feet = new Measure(Type.LENGTH, Unit.FEET, 0.0);
+    public void shouldBeEqualIfLengthValueIsZeroAndUnitIsSame() throws Exception {
+        Length inch1 = new Length(0, Units.INCH);
+        Length inch2 = new Length(0, Units.INCH);
+        assertEquals(inch1, inch2);
+    }
 
-        //then
+    @Test
+    public void shouldBeEqualIfLengthValueIsZeroAndUnitIsDifferent() throws Exception {
+        Length inch = new Length(0, Units.INCH);
+        Length feet = new Length(0, Units.FEET);
         assertEquals(inch, feet);
     }
 
     @Test
-    public void shouldNotBeEqualForZeroValueDifferentUnitDifferentType() throws Exception {
-        //given
-        Measure feet = new Measure(Type.LENGTH, Unit.FEET, 0.0);
-        Measure gram = new Measure(Type.WEIGHT, Unit.GRAM, 0.0);
-
-        //then
-        assertFalse(feet.equals(gram));
-    }
-
-    @Test
-    public void shouldNotBeEqualForSameValueSameTypeDifferentUnit() throws Exception {
-        //given
-        Measure feet = new Measure(Type.LENGTH, Unit.FEET, 1.0);
-        Measure inch = new Measure(Type.LENGTH, Unit.INCH, 1.0);
-
-        //then
+    public void shouldNotBeEqualIfLengthValueIsSameAndUnitIsDifferent() throws Exception {
+        Length inch = new Length(4, Units.FEET);
+        Length feet = new Length(4, Units.INCH);
         assertFalse(feet.equals(inch));
     }
 
     @Test
-    public void shouldBeEqualForDifferentUnitSameTypeValueMultipliedByTheConversionFactor() throws Exception {
-        //given
-        Measure feet = new Measure(Type.LENGTH, Unit.FEET, 1.0);
-        Measure inch = new Measure(Type.LENGTH, Unit.FEET, 12);
+    public void shouldBeEqualIfWeightValueIsZeroAndUnitIsSame() throws Exception {
+        Weight gram1 = new Weight(0, Units.GRAM);
+        Weight gram2 = new Weight(0, Units.GRAM);
+        assertEquals(gram1, gram2);
+    }
 
-        //then
-        assertEquals(feet,inch);
+    @Test
+    public void shouldBeEqualIfWeightValueIsZeroAndUnitIsDifferent() throws Exception {
+        Weight gram = new Weight(0, Units.GRAM);
+        Weight kilogram = new Weight(0, Units.KILOGRAM);
+        assertEquals(gram, kilogram);
+    }
+
+    @Test
+    public void shouldNotBeEqualIfWeightValueIsSameAndUnitIsDifferent() throws Exception {
+        Weight gram = new Weight(4, Units.GRAM);
+        Weight kilogram = new Weight(4, Units.KILOGRAM);
+        assertFalse(gram.equals(kilogram));
+    }
+
+    @Test
+    public void oneFeetShouldBeEqualToTwelveInches() throws Exception {
+        Length feet = new Length(1, Units.FEET);
+        Length inch = new Length(12, Units.INCH);
+        assertEquals(inch, feet);
+    }
+
+    @Test
+    public void oneKilogramShouldBeEqualToThousandGrams() throws Exception {
+        Weight kilogram = new Weight(1, Units.KILOGRAM);
+        Weight gram = new Weight(1000, Units.GRAM);
+        assertEquals(gram, kilogram);
     }
 }
