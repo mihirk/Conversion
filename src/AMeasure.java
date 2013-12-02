@@ -1,13 +1,36 @@
+import javax.xml.bind.ValidationException;
+import java.util.HashMap;
+
 public abstract class AMeasure {
 
     protected double value;
     protected Unit unit;
+    protected HashMap<Unit, Double> validUnits;
 
-    public AMeasure(double value, Unit unitName) {
-        this.factory(value, unitName);
+
+    protected AMeasure(double value, Unit unitName) {
+        this.factory(value, unitName, validUnits);
     }
 
-    protected abstract double convert(Object o, Unit unit);
+    protected double convert(Unit unit) {
+        return this.getConversionFactor(this.unit, unit) * this.value;
+    }
+
+    protected abstract double getConversionFactor(Unit unit1, Unit unit2);
+
+    protected abstract HashMap<Unit, Double> initializeValidUnits(HashMap<Unit, Double> validUnits);
+
+
+    protected void factory(double value, Unit unitName, HashMap<Unit, Double> validUnits) {
+        this.value = value;
+        this.validUnits = new HashMap<Unit, Double>();
+        this.validUnits = this.initializeValidUnits(this.validUnits);
+        if (this.validUnits.containsKey(unitName)) {
+            this.unit = unitName;
+        } else {
+            throw new IllegalArgumentException(new ValidationException("Illegal Unit"));
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -52,10 +75,10 @@ public abstract class AMeasure {
         return getClass() != o.getClass();
     }
 
-    private boolean isNotEqualAfterConversion(AMeasure aMeasure) {
-        return aMeasure.convert(aMeasure, this.unit) != this.value;
-    }
 
+    private boolean isNotEqualAfterConversion(AMeasure aMeasure) {
+        return aMeasure.convert(this.unit) != this.value;
+    }
 
     @Override
     public int hashCode() {
@@ -67,10 +90,4 @@ public abstract class AMeasure {
         return result;
     }
 
-    public void factory(double value, Unit unitName) {
-        this.value = value;
-        if (this.unit.isAValidUnitForType(unitName)) {
-            this.unit = unitName;
-        }
-    }
 }
