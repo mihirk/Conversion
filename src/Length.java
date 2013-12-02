@@ -10,7 +10,6 @@ public class Length extends AMeasure {
     @Override
     protected double getConversionFactor(Unit unit1, Unit unit2) {
         return validUnits.get(unit1)/validUnits.get(unit2);
-
     }
 
     @Override

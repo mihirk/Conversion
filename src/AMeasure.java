@@ -16,7 +16,9 @@ public abstract class AMeasure {
         return this.getConversionFactor(this.unit, unit) * this.value;
     }
 
-    protected abstract double getConversionFactor(Unit unit1, Unit unit2);
+    protected double getConversionFactor(Unit unit1, Unit unit2){
+        return this.validUnits.get(unit1)/this.validUnits.get(unit2);
+    }
 
     protected abstract HashMap<Unit, Double> initializeValidUnits(HashMap<Unit, Double> validUnits);
 
@@ -89,5 +91,6 @@ public abstract class AMeasure {
         result = 31 * result + (unit != null ? unit.hashCode() : 0);
         return result;
     }
+
 
 }

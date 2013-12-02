@@ -67,5 +67,9 @@ public class ConverterTest {
         assertEquals(feet, inch);
     }
 
+    @Test
+    public void testName() throws Exception {
 
+
+    }
 }
